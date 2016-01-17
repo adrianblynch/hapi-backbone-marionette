@@ -4,8 +4,32 @@
 	<script src="lib/jquery-2.2.0.min.js"></script>
 	<script src="lib/underscore-1.8.3.js"></script>
 	<script src="lib/backbone-1.2.3-min.js"></script>
+	<script src="lib/backbone.marionette-2.4.4.min.js"></script>
 	<script>
 		$(function () {
+
+			var app = new Marionette.Application()
+
+			app.addRegions({
+				root: "#root"
+			})
+
+			var UserItemView = Marionette.ItemView.extend({
+				tagName: 'li',
+				template: _.template($('#userTemplate').html()),
+				initialize: function() {
+					this.render()
+				},
+				render: function () {
+					this.$el.html(this.template(this.model.toJSON()))
+					return this
+				}
+			})
+
+			var UsersCollectionView = Marionette.CollectionView.extend({
+				tagName: 'ul',
+				childView: UserItemView
+			})
 
 			var UserModel = Backbone.Model.extend({
 				defaults: {
@@ -20,38 +44,14 @@
 				url: 'users'
 			})
 
-			var UserView = Backbone.View.extend({
-				tagName: 'li',
-				template: _.template($('#userTemplate').html()),
-				initialize: function() {
-					this.render()
-				},
-				render: function () {
-					this.$el.html(this.template(this.model.toJSON()))
-					return this
-				}
+			app.addInitializer(function () {
+				var usersCollection = new UsersCollection()
+				usersCollection.fetch({reset: true})
+				var usersCollectionView = new UsersCollectionView({ collection: usersCollection })
+				app.root.show(usersCollectionView)
 			})
 
-			var UsersView = Backbone.View.extend({
-				tagName: 'ul',
-				initialize: function () {
-					this.listenTo(this.collection, 'reset add change remove', this.render) //
-				},
-				render: function () {
-					this.collection.each(function (user) {
-						var userView = new UserView({model: user})
-						this.$el.append(userView.render().el)
-					}, this)
-					return this
-				}
-			})
-
-			var usersCollection = new UsersCollection()
-			var usersView = new UsersView({ collection: usersCollection })
-
-			$(document.body).append(usersView.render().el)
-
-			usersCollection.fetch({reset: true})
+			app.start()
 
 		})
 	</script>
@@ -61,7 +61,8 @@
 </head>
 <body>
 
-	<h1>Hapi Backbone Users</h1>
+	<h1>Hapi Backbone Marionette Users</h1>
+	<div id="root"></div>
 
 </body>
 </html>
