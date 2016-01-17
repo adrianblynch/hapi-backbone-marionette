@@ -1,6 +1,6 @@
-# Hapi with Backbone
+# Hapi with Backbone and Marionette
 
-Bare bones Hapi and Backbone to show a list of users.
+Bare bones Hapi and Backbone with Marionette to show a list of users.
 
 This repo serves both the data and the static files for simplicity.
 
@@ -14,7 +14,7 @@ This repo serves both the data and the static files for simplicity.
 
 ## Next
 
-Go see the Hapi Backbone Marionette repo!
+Go see the Hapi Angular repo!
 
 ## Notes
 
