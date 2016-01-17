@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="bootstrap-3.3.6-dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bootstrap-3.3.6-dist/css/bootstrap-theme.min.css">
+	<script src="jquery-2.2.0.min.js"></script>
+	<script src="underscore-1.8.3.js"></script>
+	<script src="backbone-1.2.3-min.js"></script>
+	<script src="bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+	<script>
+		$(function () {
+
+			var UserModel = Backbone.Model.extend({
+				defaults: {
+					firstName: '',
+					lastName: '',
+					email: ''
+				}
+			})
+
+			var UsersCollection = Backbone.Collection.extend({
+				model: UserModel,
+				url: 'users'
+			})
+
+			var UserView = Backbone.View.extend({
+				tagName: 'li',
+				template: _.template($('#userTemplate').html()),
+				initialize: function() {
+					this.render()
+				},
+				render: function () {
+					this.$el.html(this.template(this.model.toJSON()))
+					return this
+				}
+			})
+
+			var UsersView = Backbone.View.extend({
+				tagName: 'ul',
+				initialize: function () {
+					this.listenTo(this.collection, 'reset add change remove', this.render) //
+				},
+				render: function () {
+					this.collection.each(function (user) {
+						var userView = new UserView({model: user})
+						this.$el.append(userView.render().el)
+					}, this)
+					return this
+				}
+			})
+
+			var usersCollection = new UsersCollection()
+			var usersView = new UsersView({ collection: usersCollection })
+
+			$(document.body).append(usersView.render().el)
+
+			usersCollection.fetch({reset: true})
+
+		})
+	</script>
+	<script id="userTemplate" type="text/template">
+		<%= firstName %> <%= lastName %> (<%= email %>)
+	</script>
+</head>
+<body>
+
+	<h1>Hapi Backbone Users</h1>
+
+</body>
+</html>
