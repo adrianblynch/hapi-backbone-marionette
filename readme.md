@@ -14,7 +14,7 @@ This repo serves both the data and the static files for simplicity.
 
 ## Next
 
-Go see the Hapi Angular repo!
+Go see the [Hapi Backbone with Rivets repo](https://github.com/adrianblynch/hapi-backbone-rivets)!
 
 ## Notes
 
