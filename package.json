@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "hapi": "^12.1.0",
-    "inert": "^3.2.0"
+    "inert": "^4.0.0"
   }
 }
